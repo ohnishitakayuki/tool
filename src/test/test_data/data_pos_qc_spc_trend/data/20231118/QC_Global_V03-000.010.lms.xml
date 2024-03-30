@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DatasetMessageSummary V="1">
+  <Item index="0">
+    <Item V="2">
+      <CodeLocation></CodeLocation>
+      <SourceType>Undefined</SourceType>
+      <SourceID V="1">224|261_230824601_POSITION-QC2-SS02|QC_Global_V03.job8.0023|Measurement.0|Alignment|0||000|A|A|1|1|||0|0|0</SourceID>
+      <Type>Error</Type>
+      <Severity>Undefined</Severity>
+      <Number>Undefined</Number>
+      <ShortDescription>Canceled</ShortDescription>
+      <Description></Description>
+      <MessageID>ab805a66-ec9c-42bc-80f2-1ff4f952c457</MessageID>
+    </Item>
+  </Item>
+  <Item index="1">
+    <Item V="2">
+      <CodeLocation></CodeLocation>
+      <SourceType>Undefined</SourceType>
+      <SourceID V="1">224|261_230824601_POSITION-QC2-SS02|QC_Global_V03.job8.0023|Measurement.0|Alignment|0||000|A|B|1|1|||0|0|0</SourceID>
+      <Type>Error</Type>
+      <Severity>Undefined</Severity>
+      <Number>Undefined</Number>
+      <ShortDescription>Canceled</ShortDescription>
+      <Description></Description>
+      <MessageID>f8320081-13ac-48b9-8d09-74e9fd84db5a</MessageID>
+    </Item>
+  </Item>
+</DatasetMessageSummary>

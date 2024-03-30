@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DatasetMessageSummary V="1">
+  <Item index="0">
+    <Item V="2">
+      <CodeLocation></CodeLocation>
+      <SourceType>Undefined</SourceType>
+      <SourceID V="1">||||||||||||||||</SourceID>
+      <Type>Error</Type>
+      <Severity>Undefined</Severity>
+      <Number>Undefined</Number>
+      <ShortDescription>Skipped</ShortDescription>
+      <Description></Description>
+      <MessageID>97456888-ac25-4f09-a3f1-b6b397ea29e9</MessageID>
+    </Item>
+  </Item>
+  <Item index="1">
+    <Item V="2">
+      <CodeLocation>int __thiscall CImageStackAcquisitionExec::ProcessAcquirePosition(const struct stage_coordinates,const struct stage_coordinates,class CImageStackAcquisitionParameter &amp;,int,int,int,struct stage_coordinates,int,int)</CodeLocation>
+      <SourceType>Undefined</SourceType>
+      <SourceID V="1">||||||||||||||||</SourceID>
+      <Type>Error</Type>
+      <Severity>Undefined</Severity>
+      <Number>JP_UserAbort</Number>
+      <ShortDescription>User aborted.</ShortDescription>
+      <Description></Description>
+      <MessageID>ac9bf38f-d2c6-4c18-a14b-d0894b441305</MessageID>
+    </Item>
+  </Item>
+  <Item index="2">
+    <Item V="2">
+      <CodeLocation>int __thiscall CMetaDataCollector::CloseMetaDataSink(void)</CodeLocation>
+      <SourceType>ImageStack</SourceType>
+      <SourceID V="1">224|KLAmask|8x8_SPC_swath_Array_CTDconv..job8.0024|Measurement.0|Alignment|0||000|A|B|1|1|||0|0|0</SourceID>
+      <Type>Error</Type>
+      <Severity>Undefined</Severity>
+      <Number>Undefined</Number>
+      <ShortDescription>Data incomplete, missing data code: 0x1D7FBFE</ShortDescription>
+      <Description></Description>
+      <MessageID>369cf91b-d3c1-487d-b28f-2e4281bb49f8</MessageID>
+    </Item>
+  </Item>
+</DatasetMessageSummary>
