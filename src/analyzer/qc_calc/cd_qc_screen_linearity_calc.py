@@ -17,7 +17,7 @@ class CdQcScreenLinearityCalc(CdQcCalc):
 
     # Excel関係
     p_trend_format = Path(os.path.dirname(__file__) + '/../../excel_template/cdQC_trend/Screen Linearity Trend.xlsx')
-    excel_file_stem = 'Dynamic Short'
+    excel_file_stem = 'Screen Linearity'
     excel_start_row = 6
     excel_start_column = 1
 
