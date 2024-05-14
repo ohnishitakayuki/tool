@@ -75,6 +75,6 @@ class CDFft:
 if __name__ == '__main__':
     t = CDFft('../../test/test_data/data_cd_fft/27_ASI_160pA_GLCD_88_256pt_v1_510H_L6.000.A00005005S0001_00.csv')
     df = t.df_fft(512, 'edge_left')
-    # df.to_csv('../../t2.csv')
+    df.to_csv('../../t2.csv')
     print(df)
     print(df['pow'].sum())

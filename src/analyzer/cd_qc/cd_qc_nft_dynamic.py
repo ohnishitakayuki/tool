@@ -37,6 +37,7 @@ class CdQcNftDynamic:
         # 結合してオブジェクト変数化
         v = v_meas | v_value | v_plate
         for k in v:
+            print(k)
             setattr(self, k, v[k])
 
         # columnとrowをオブジェクト変数化
@@ -216,4 +217,4 @@ if __name__ == '__main__':
     # p_excel = Path('../../excel_template/Global STR format.xlsx')
     p_save = Path('../../../result/nft dynamic.xlsx')
     print(vars(c))
-    c.to_excel(p_save)
+    # c.to_excel(p_save)
