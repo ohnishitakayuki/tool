@@ -3,7 +3,7 @@ import sys
 import configparser
 from pathlib import Path
 from datetime import timedelta
-
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 from analyzer.file.file_collector import FileCollector
 from analyzer.file.file_deleter import FileDeleter
 
