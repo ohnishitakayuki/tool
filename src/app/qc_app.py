@@ -5,6 +5,7 @@ from pathlib import Path
 import tkinter as tk
 from tkinter import ttk
 import configparser
+import subprocess
 
 from pprint import pprint
 
@@ -72,11 +73,17 @@ class QCApp(tk.Frame):
         i_num = 0
         v = list_items[i_num]
         self.label_baseline1 = tk.Label(self.Frame1, text=v['item_display'])
-        self.label_baseline1.grid(row=0, column=0)
+        self.label_baseline1.grid(row=0, column=0, padx=3, pady=2)
         self.Button_baseline1 = tk.Button(self.Frame1, text='解析', command=lambda:self._calc_call(list_items[0]))
-        self.Button_baseline1.grid(row=0, column=1)
+        self.Button_baseline1.grid(row=0, column=1, padx=3, pady=2)
         self.Button_baseline1 = tk.Button(self.Frame1, text='無視データ選択', command=lambda:self._ignore_call(list_items[0]))
-        self.Button_baseline1.grid(row=0, column=2)
+        self.Button_baseline1.grid(row=0, column=2, padx=3, pady=2)
+        self.Button_baseline1 = tk.Button(self.Frame1, text='トレンド表示',
+                                          command=lambda: self._trend_open(list_items[0]))
+        self.Button_baseline1.grid(row=0, column=3, padx=3, pady=2)
+        self.Button_baseline1 = tk.Button(self.Frame1, text='データフォルダ',
+                                          command=lambda: self._data_folder_open(list_items[0]))
+        self.Button_baseline1.grid(row=0, column=4, padx=3, pady=2)
 
         # 2番目。i_numは1。
         if num_items == 1:
@@ -84,11 +91,17 @@ class QCApp(tk.Frame):
         i_num = 1
         v = list_items[i_num]
         self.label_baseline2 = tk.Label(self.Frame1, text=v['item_display'])
-        self.label_baseline2.grid(row=1, column=0)
+        self.label_baseline2.grid(row=1, column=0, padx=3, pady=2)
         self.Button_baseline2 = tk.Button(self.Frame1, text='解析', command=lambda:self._calc_call(list_items[1]))
-        self.Button_baseline2.grid(row=1, column=1)
+        self.Button_baseline2.grid(row=1, column=1, padx=3, pady=2)
         self.Button_baseline2 = tk.Button(self.Frame1, text='無視データ選択', command=lambda:self._ignore_call(list_items[1]))
-        self.Button_baseline2.grid(row=1, column=2)
+        self.Button_baseline2.grid(row=1, column=2, padx=3, pady=2)
+        self.Button_baseline2 = tk.Button(self.Frame1, text='トレンド表示',
+                                          command=lambda: self._trend_open(list_items[1]))
+        self.Button_baseline2.grid(row=1, column=3, padx=3, pady=2)
+        self.Button_baseline2 = tk.Button(self.Frame1, text='データフォルダ',
+                                          command=lambda: self._data_folder_open(list_items[1]))
+        self.Button_baseline2.grid(row=1, column=4, padx=3, pady=2)
 
         # 3番目。i_numは2。
         if num_items == 2:
@@ -96,11 +109,17 @@ class QCApp(tk.Frame):
         i_num = 2
         v = list_items[i_num]
         self.label_baseline3 = tk.Label(self.Frame1, text=v['item_display'])
-        self.label_baseline3.grid(row=2, column=0)
+        self.label_baseline3.grid(row=2, column=0, padx=3, pady=2)
         self.Button_baseline3 = tk.Button(self.Frame1, text='解析', command=lambda:self._calc_call(list_items[2]))
-        self.Button_baseline3.grid(row=2, column=1)
+        self.Button_baseline3.grid(row=2, column=1, padx=3, pady=2)
         self.Button_baseline3 = tk.Button(self.Frame1, text='無視データ選択', command=lambda:self._ignore_call(list_items[2]))
-        self.Button_baseline3.grid(row=2, column=2)
+        self.Button_baseline3.grid(row=2, column=2, padx=3, pady=2)
+        self.Button_baseline3 = tk.Button(self.Frame1, text='トレンド表示',
+                                          command=lambda: self._trend_open(list_items[2]))
+        self.Button_baseline3.grid(row=2, column=3, padx=3, pady=2)
+        self.Button_baseline3 = tk.Button(self.Frame1, text='データフォルダ',
+                                          command=lambda: self._data_folder_open(list_items[2]))
+        self.Button_baseline3.grid(row=2, column=4, padx=3, pady=2)
 
 
         # 4番目。i_numは3。
@@ -109,12 +128,18 @@ class QCApp(tk.Frame):
         i_num = 3
         v = list_items[i_num]
         self.label_baseline4 = tk.Label(self.Frame1, text=v['item_display'])
-        self.label_baseline4.grid(row=3, column=0)
+        self.label_baseline4.grid(row=3, column=0, padx=3, pady=2)
         self.Button_baseline4 = tk.Button(self.Frame1, text='解析', command=lambda: self._calc_call(list_items[3]))
-        self.Button_baseline4.grid(row=3, column=1)
+        self.Button_baseline4.grid(row=3, column=1, padx=3, pady=2)
         self.Button_baseline4 = tk.Button(self.Frame1, text='無視データ選択',
                                           command=lambda: self._ignore_call(list_items[3]))
-        self.Button_baseline4.grid(row=3, column=2)
+        self.Button_baseline4.grid(row=3, column=2, padx=3, pady=2)
+        self.Button_baseline4 = tk.Button(self.Frame1, text='トレンド表示',
+                                          command=lambda: self._trend_open(list_items[3]))
+        self.Button_baseline4.grid(row=3, column=3, padx=3, pady=2)
+        self.Button_baseline4 = tk.Button(self.Frame1, text='データフォルダ',
+                                          command=lambda: self._data_folder_open(list_items[3]))
+        self.Button_baseline4.grid(row=3, column=4, padx=3, pady=2)
 
         # 5番目。i_numは4。
         if num_items == 4:
@@ -122,16 +147,22 @@ class QCApp(tk.Frame):
         i_num = 4
         v = list_items[i_num]
         self.label_baseline5 = tk.Label(self.Frame1, text=v['item_display'])
-        self.label_baseline5.grid(row=4, column=0)
+        self.label_baseline5.grid(row=4, column=0, padx=3, pady=2)
         self.Button_baseline5 = tk.Button(self.Frame1, text='解析', command=lambda: self._calc_call(list_items[4]))
-        self.Button_baseline5.grid(row=4, column=1)
+        self.Button_baseline5.grid(row=4, column=1, padx=3, pady=2)
         self.Button_baseline5 = tk.Button(self.Frame1, text='無視データ選択',
                                           command=lambda: self._ignore_call(list_items[4]))
-        self.Button_baseline5.grid(row=4, column=2)
+        self.Button_baseline5.grid(row=4, column=2, padx=3, pady=2)
+        self.Button_baseline5 = tk.Button(self.Frame1, text='トレンド表示',
+                                          command=lambda: self._trend_open(list_items[4]))
+        self.Button_baseline5.grid(row=4, column=3, padx=3, pady=2)
+        self.Button_baseline5 = tk.Button(self.Frame1, text='データフォルダ',
+                                          command=lambda: self._data_folder_open(list_items[4]))
+        self.Button_baseline5.grid(row=4, column=4, padx=3, pady=2)
         if v['has_reference_data']:
             self.Button_baseline5 = tk.Button(self.Frame1, text='リファレンス選択',
                                               command=lambda: self._reference_call(list_items[4]))
-            self.Button_baseline5.grid(row=4, column=3)
+            self.Button_baseline5.grid(row=4, column=5, padx=3, pady=2)
 
 
         # 6番目。i_numは5。
@@ -140,12 +171,18 @@ class QCApp(tk.Frame):
         i_num = 5
         v = list_items[i_num]
         self.label_baseline6 = tk.Label(self.Frame1, text=v['item_display'])
-        self.label_baseline6.grid(row=5, column=0)
+        self.label_baseline6.grid(row=5, column=0, padx=3, pady=2)
         self.Button_baseline6 = tk.Button(self.Frame1, text='解析', command=lambda: self._calc_call(list_items[5]))
-        self.Button_baseline6.grid(row=5, column=1)
+        self.Button_baseline6.grid(row=5, column=1, padx=3, pady=2)
         self.Button_baseline6 = tk.Button(self.Frame1, text='無視データ選択',
                                           command=lambda: self._ignore_call(list_items[5]))
-        self.Button_baseline6.grid(row=5, column=2)
+        self.Button_baseline6.grid(row=5, column=2, padx=3, pady=2)
+        self.Button_baseline6 = tk.Button(self.Frame1, text='トレンド表示',
+                                          command=lambda: self._trend_open(list_items[5]))
+        self.Button_baseline6.grid(row=5, column=3, padx=3, pady=2)
+        self.Button_baseline6 = tk.Button(self.Frame1, text='データフォルダ',
+                                          command=lambda: self._data_folder_open(list_items[5]))
+        self.Button_baseline6.grid(row=5, column=4, padx=3, pady=2)
 
         # 7番目。i_numは6。
         if num_items == 6:
@@ -153,12 +190,18 @@ class QCApp(tk.Frame):
         i_num = 6
         v = list_items[i_num]
         self.label_baseline7 = tk.Label(self.Frame1, text=v['item_display'])
-        self.label_baseline7.grid(row=6, column=0)
+        self.label_baseline7.grid(row=6, column=0, padx=3, pady=2)
         self.Button_baseline7 = tk.Button(self.Frame1, text='解析', command=lambda: self._calc_call(list_items[6]))
-        self.Button_baseline7.grid(row=6, column=1)
+        self.Button_baseline7.grid(row=6, column=1, padx=3, pady=2)
         self.Button_baseline7 = tk.Button(self.Frame1, text='無視データ選択',
                                           command=lambda: self._ignore_call(list_items[6]))
-        self.Button_baseline7.grid(row=6, column=2)
+        self.Button_baseline7.grid(row=6, column=2, padx=3, pady=2)
+        self.Button_baseline7 = tk.Button(self.Frame1, text='トレンド表示',
+                                          command=lambda: self._trend_open(list_items[6]))
+        self.Button_baseline7.grid(row=6, column=3, padx=3, pady=2)
+        self.Button_baseline7 = tk.Button(self.Frame1, text='データフォルダ',
+                                          command=lambda: self._data_folder_open(list_items[6]))
+        self.Button_baseline7.grid(row=6, column=4, padx=3, pady=2)
 
         # 8番目。i_numは7。
         if num_items == 7:
@@ -166,12 +209,18 @@ class QCApp(tk.Frame):
         i_num = 7
         v = list_items[i_num]
         self.label_baseline8 = tk.Label(self.Frame1, text=v['item_display'])
-        self.label_baseline8.grid(row=7, column=0)
+        self.label_baseline8.grid(row=7, column=0, padx=3, pady=2)
         self.Button_baseline8 = tk.Button(self.Frame1, text='解析', command=lambda: self._calc_call(list_items[7]))
-        self.Button_baseline8.grid(row=7, column=1)
+        self.Button_baseline8.grid(row=7, column=1, padx=3, pady=2)
         self.Button_baseline8 = tk.Button(self.Frame1, text='無視データ選択',
                                           command=lambda: self._ignore_call(list_items[7]))
-        self.Button_baseline8.grid(row=7, column=2)
+        self.Button_baseline8.grid(row=7, column=2, padx=3, pady=2)
+        self.Button_baseline8 = tk.Button(self.Frame1, text='トレンド表示',
+                                          command=lambda: self._trend_open(list_items[7]))
+        self.Button_baseline8.grid(row=7, column=3, padx=3, pady=2)
+        self.Button_baseline8 = tk.Button(self.Frame1, text='データフォルダ',
+                                          command=lambda: self._data_folder_open(list_items[7]))
+        self.Button_baseline8.grid(row=7, column=4, padx=3, pady=2)
 
         # 9番目。i_numは8。
         if num_items == 8:
@@ -179,12 +228,18 @@ class QCApp(tk.Frame):
         i_num = 8
         v = list_items[i_num]
         self.label_baseline9 = tk.Label(self.Frame1, text=v['item_display'])
-        self.label_baseline9.grid(row=8, column=0)
+        self.label_baseline9.grid(row=8, column=0, padx=3, pady=2)
         self.Button_baseline9 = tk.Button(self.Frame1, text='解析', command=lambda: self._calc_call(list_items[8]))
-        self.Button_baseline9.grid(row=8, column=1)
+        self.Button_baseline9.grid(row=8, column=1, padx=3, pady=2)
         self.Button_baseline9 = tk.Button(self.Frame1, text='無視データ選択',
                                           command=lambda: self._ignore_call(list_items[8]))
-        self.Button_baseline9.grid(row=8, column=2)
+        self.Button_baseline9.grid(row=8, column=2, padx=3, pady=2)
+        self.Button_baseline9 = tk.Button(self.Frame1, text='トレンド表示',
+                                          command=lambda: self._trend_open(list_items[8]))
+        self.Button_baseline9.grid(row=8, column=3, padx=3, pady=2)
+        self.Button_baseline9 = tk.Button(self.Frame1, text='データフォルダ',
+                                          command=lambda: self._data_folder_open(list_items[8]))
+        self.Button_baseline9.grid(row=8, column=4, padx=3, pady=2)
 
         # 10番目。i_numは9。
         if num_items == 9:
@@ -192,12 +247,18 @@ class QCApp(tk.Frame):
         i_num = 9
         v = list_items[i_num]
         self.label_baseline10 = tk.Label(self.Frame1, text=v['item_display'])
-        self.label_baseline10.grid(row=9, column=0)
+        self.label_baseline10.grid(row=9, column=0, padx=3, pady=2)
         self.Button_baseline10 = tk.Button(self.Frame1, text='解析', command=lambda: self._calc_call(list_items[9]))
-        self.Button_baseline10.grid(row=9, column=1)
+        self.Button_baseline10.grid(row=9, column=1, padx=3, pady=2)
         self.Button_baseline10 = tk.Button(self.Frame1, text='無視データ選択',
                                           command=lambda: self._ignore_call(list_items[9]))
-        self.Button_baseline10.grid(row=9, column=2)
+        self.Button_baseline10.grid(row=9, column=2, padx=3, pady=2)
+        self.Button_baseline10 = tk.Button(self.Frame1, text='トレンド表示',
+                                          command=lambda: self._trend_open(list_items[9]))
+        self.Button_baseline10.grid(row=9, column=3, padx=3, pady=2)
+        self.Button_baseline10 = tk.Button(self.Frame1, text='データフォルダ',
+                                          command=lambda: self._data_folder_open(list_items[9]))
+        self.Button_baseline10.grid(row=9, column=4, padx=3, pady=2)
 
         # 11番目。i_numは10。
         if num_items == 10:
@@ -205,12 +266,18 @@ class QCApp(tk.Frame):
         i_num = 10
         v = list_items[i_num]
         self.label_baseline11 = tk.Label(self.Frame1, text=v['item_display'])
-        self.label_baseline11.grid(row=10, column=0)
+        self.label_baseline11.grid(row=10, column=0, padx=3, pady=2)
         self.Button_baseline11 = tk.Button(self.Frame1, text='解析', command=lambda: self._calc_call(list_items[10]))
-        self.Button_baseline11.grid(row=10, column=1)
+        self.Button_baseline11.grid(row=10, column=1, padx=3, pady=2)
         self.Button_baseline11 = tk.Button(self.Frame1, text='無視データ選択',
                                            command=lambda: self._ignore_call(list_items[10]))
-        self.Button_baseline11.grid(row=10, column=2)
+        self.Button_baseline11.grid(row=10, column=2, padx=3, pady=2)
+        self.Button_baseline11 = tk.Button(self.Frame1, text='トレンド表示',
+                                          command=lambda: self._trend_open(list_items[10]))
+        self.Button_baseline11.grid(row=10, column=3, padx=3, pady=2)
+        self.Button_baseline11 = tk.Button(self.Frame1, text='データフォルダ',
+                                          command=lambda: self._data_folder_open(list_items[10]))
+        self.Button_baseline11.grid(row=10, column=4, padx=3, pady=2)
 
     def get_config_machine(self):
         self.config_ini = configparser.ConfigParser()
@@ -464,8 +531,21 @@ class QCApp(tk.Frame):
             self.qc_i.write_ref_list(list_ref)
         self.sub_window.destroy()
 
+
     def _subwindow_ng(self):
         self.sub_window.destroy()
+
+
+    # トレンドを開く
+    def _trend_open(self, list_item):
+        p = list_item['trend_path'].replace('/', '\\')
+        subprocess.Popen(["start", "", p], shell=True)
+
+
+    def _data_folder_open(self, list_item):
+        p = list_item['data_folder_path'].replace('/', '\\')
+        subprocess.Popen(["explorer", p], shell=True)
+
 
 if __name__ == '__main__':
     os.chdir('../')
