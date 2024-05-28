@@ -77,9 +77,12 @@ class CdQcCdMeanCalc(CdQcCalc):
         for r in list_instance:
             # 結果インスタンスから引き出す数値
             print(r.meas_start)
-            print(r.hor_500nm_space)
-            list_result_tmp = [r.meas_start, r.hor_500nm_space, r.ver_500nm_space,
-                               r.hor_500nm_pitch, r.ver_500nm_pitch]
+            try:
+                list_result_tmp = [r.meas_start, r.hor_500nm_space, r.ver_500nm_space,
+                                   r.hor_500nm_pitch, r.ver_500nm_pitch]
+            except AttributeError:
+                print('column is not found.')
+                continue
             list_result.append(list_result_tmp)
         # 自分でカラム名つけてね。
         df = pd.DataFrame(list_result, columns=['Date', 'cd_mean_space_hor', 'cd_mean_space_ver',
