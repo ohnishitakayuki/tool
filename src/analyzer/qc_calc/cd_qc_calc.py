@@ -153,6 +153,9 @@ class CdQcCalc:
             except AttributeError:
                 print('解析がうまくいかなかったのでError')
                 continue
+            except KeyError:
+                print('シート内にカラムが無かったのでError')
+                continue
 
             # ある値が超えた場合にスキップする関数。関数そのものは継承先で記述。
             if self._qc_check_value(r):
