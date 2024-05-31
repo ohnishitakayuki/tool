@@ -28,7 +28,7 @@ from analyzer.cd_qc.cd_qc_angle import CdQcAngle
          '/test_data/data_cd_qc_angle/result.pkl'),
     ]
 )
-def test_sl(p_0deg, p_270deg, p_result):
+def test_angle(p_0deg, p_270deg, p_result):
     # 比較リスト、新しく追加したい場合は、ここにいれればいい。辞書は作り直し
     key_meas = ['meas_start_0deg', 'meas_end_0deg', 'meas_time_0deg',
                 'meas_start_270deg', 'meas_end_270deg', 'meas_time_270deg', ]

@@ -12,10 +12,10 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from getdf.convert_at import ConvertAt
 
 
-class CdQcAngle:
+class CdNftDynamicMultiRoi:
     # Excel関係
-    p_excel = Path(os.path.dirname(__file__) + '/../../excel_template/cdQC/xxxx format.xlsx')
-    excel_start_row = 3
+    p_excel = Path(os.path.dirname(__file__) + '/../../excel_template/cdQC/NFT Dynamic multiROI format.xlsx')
+    excel_start_row = 4
     excel_start_column = 2
 
     def __init__(self, p_normal, p_no_overlap, plate_type=''):
@@ -38,18 +38,22 @@ class CdQcAngle:
         # 値
         v_value = self._calc_angle(df_normal, df_no_overlap)
 
-        # # plate type
-        # self.plate_type = plate_type
-        # v_plate = {'plate_type': self.plate_type}
+        # plate type
+        self.plate_type = plate_type
+        v_plate = {'plate_type': self.plate_type}
 
-        # # 結合してオブジェクト変数化
-        # v = v_meas | v_value | v_plate
-        # for k in v:
-        #     setattr(self, k, v[k])
-        #
-        # # Excel用の変換
-        # self.df_0deg = df_0deg
-        # self.df_270deg = df_270deg
+        # columnとrowをオブジェクト変数化
+        self.column_num = df_normal['die_x'][0]
+        self.row_num = df_normal['die_y'][0]
+
+        # 結合してオブジェクト変数化
+        v = v_meas | v_value | v_plate
+        for k in v:
+            setattr(self, k, v[k])
+
+        # Excel用の変換
+        self.df_normal = df_normal
+        self.df_no_overlap = df_no_overlap
 
     def _convert_df(self, p):
         # strかpathlibかわからんのでとりあえず変換。
@@ -97,77 +101,65 @@ class CdQcAngle:
         df_hor = df[df['label']=='SPACE-Y']
         df_ver = df[df['label']=='SPACE-X']
 
-        #
+        # dfのマージ
         df_all_hor = pd.merge(df_hor, df_ref_hor, how='inner', on=['design_pos_x', 'design_pos_y'])
-        # df_v = pd.merge(df_v1, df_v2, how='inner', on=['design_pos_x', 'design_pos_y'])
+        df_all_ver = pd.merge(df_ver, df_ref_ver, how='inner', on=['design_pos_x', 'design_pos_y'])
 
         df_all_hor['cd_diff'] = df_all_hor['cd'] - df_all_hor['cd_ref']
-        print(df_all_hor['cd_diff'].std() * 3 / np.sqrt(2))
-        df_all_hor.to_csv('../t_all.csv')
+        df_all_ver['cd_diff'] = df_all_ver['cd'] - df_all_ver['cd_ref']
 
+        # 再現性
+        rep_hor = df_all_hor['cd_diff'].std() * 3 / np.sqrt(2)
+        rep_ver = df_all_ver['cd_diff'].std() * 3 / np.sqrt(2)
 
+        # CD diff
+        cd_diff_hor = df_all_hor['cd_diff'].mean()
+        cd_diff_ver = df_all_ver['cd_diff'].mean()
 
+        # cd mean
+        cd_mean_hor = df_all_hor['cd'].mean()
+        cd_mean_ref_hor = df_all_hor['cd_ref'].mean()
+        cd_mean_ver = df_all_ver['cd'].mean()
+        cd_mean_ref_ver = df_all_ver['cd_ref'].mean()
 
-        # df_normal.to_csv('../../t_normal.csv')
-        # df_no_overlap.to_csv('../../t_no_overlap.csv')
-        # df_normal = self._get_angle(df_0deg)
-        # df_no_overlap = self._get_angle(df_270deg)
-        #
-        # # df_270の座標を回転
-        # df_270deg['design_pos_x_tmp'] = df_270deg['design_pos_x']
-        # df_270deg['design_pos_x'] = df_270deg['design_pos_y']
-        # df_270deg['design_pos_y'] = -df_270deg['design_pos_x_tmp']
-        # df_270deg = df_270deg.drop('design_pos_x_tmp', axis=1)
-        #
-        # # cd名リネームしてからマージ
-        # df_0deg = df_0deg.rename(columns={'cd1': 'cd_0'})
-        # df_270deg = df_270deg.rename(columns={'cd1': 'cd_270'})
-        # df_270deg = df_270deg[['design_pos_x', 'design_pos_y', 'cd_270']]
-        #
-        # df = pd.merge(df_0deg, df_270deg, how='inner', on=['design_pos_x', 'design_pos_y'])
-        #
-        # # 平均化
-        # df_ave = df.groupby('p_angle').agg({'cd_0': 'mean', 'cd_270': 'mean'}).reset_index()
-        # df_ave['cd_diff'] = df_ave['cd_270'] - df_ave['cd_0']
-        #
-        # # スキャンごとの平均を求めて、差分を求める。
-        # df_ave2 = df_ave.copy()
-        # df_scan = pd.DataFrame(self.angle_scan_type)
-        # df_ave2 = pd.merge(df_ave2, df_scan, how='left', on='p_angle')
-        # df_scan_ave = df_ave2.groupby('scan_angle').agg({'cd_diff': 'mean'}).reset_index()
-        # df_scan_ave = df_scan_ave.rename(columns={'cd_diff': 'cd_diff_scan'})
-        # df_ave_corr = pd.merge(df_ave2, df_scan_ave, how='left', on='scan_angle')
-        # df_ave_corr['cd_diff_corr'] = df_ave_corr['cd_diff'] - df_ave_corr['cd_diff_scan']
-        # df_ave_corr = df_ave_corr[
-        #     ['p_angle', 'scan_angle', 'cd_0', 'cd_270', 'cd_diff', 'cd_diff_scan', 'cd_diff_corr']]
-        #
-        # # Angle値取得
-        # angle_diff = df_ave_corr['cd_diff'].max() - df_ave_corr['cd_diff'].min()
-        # v = {'angle_diff': angle_diff }
-        #
-        # # Angle diffを入れる
-        # for angle in self.angle_type:
-        #     angle_diff = df_ave_corr[df_ave_corr['p_angle'] == angle]['cd_diff'].iloc[0]
-        #     angle_name = str(angle).replace('-', 'm')
-        # #     v[f'cd_diff_{angle_name}deg'] = angle_diff
-        #
-        # return v
+        # 3s
+        cd_3s_hor = df_all_hor['cd'].std() * 3
+        cd_3s_ref_hor = df_all_hor['cd_ref'].std() * 3
+        cd_3s_ver = df_all_ver['cd'].std() * 3
+        cd_3s_ref_ver = df_all_ver['cd_ref'].std() * 3
 
-    def _df_columns_cd_add(self, df, add_name):
-        new_columns = []
-        for column in df.columns:
-            if 'cd' in column or 'AFQV' in column or 'PMQV' in column:
-                new_columns.append(column + '_' + add_name)
-            else:
-                new_columns.append(column)
-        df.columns = new_columns
-        return df
+        # max
+        cd_max_hor = df_all_hor['cd'].max()
+        cd_max_ref_hor = df_all_hor['cd_ref'].max()
+        cd_max_ver = df_all_ver['cd'].max()
+        cd_max_ref_ver = df_all_ver['cd_ref'].max()
 
-    def _get_angle(self, df):
-        df['p_angle'] = 0
-        for i, a in enumerate(self.angle_type):
-            df.loc[i * self.ave_num: (i+1) * self.ave_num, ['p_angle']] = a
-        return df
+        # min
+        cd_min_hor = df_all_hor['cd'].min()
+        cd_min_ref_hor = df_all_hor['cd_ref'].min()
+        cd_min_ver = df_all_ver['cd'].min()
+        cd_min_ref_ver = df_all_ver['cd_ref'].min()
+
+        # range
+        cd_range_hor = df_all_hor['cd'].max()- df_all_hor['cd'].min()
+        cd_range_ref_hor = df_all_hor['cd_ref'].max() - df_all_hor['cd_ref'].min()
+        cd_range_ver = df_all_ver['cd'].max() - df_all_ver['cd'].min()
+        cd_range_ref_ver = df_all_ver['cd_ref'].max() - df_all_ver['cd_ref'].min()
+
+        v = {'rep_3s_hor': rep_hor, 'rep_3s_ver': rep_ver, 'cd_diff_hor': cd_diff_hor, 'cd_diff_ver': cd_diff_ver,
+             'cd_mean_hor': cd_mean_hor, 'cd_mean_ref_hor': cd_mean_ref_hor,
+             'cd_mean_ver': cd_mean_ver, 'cd_mean_ref_ver': cd_mean_ref_ver,
+             'cd_3s_hor': cd_3s_hor, 'cd_3s_ref_hor': cd_3s_ref_hor,
+             'cd_3s_ver': cd_3s_ver, 'cd_3s_ref_ver': cd_3s_ref_ver,
+             'cd_max_hor': cd_max_hor, 'cd_max_ref_hor': cd_max_ref_hor,
+             'cd_max_ver': cd_max_ver, 'cd_max_ref_ver': cd_max_ref_ver,
+             'cd_min_hor': cd_min_hor, 'cd_min_ref_hor': cd_min_ref_hor,
+             'cd_min_ver': cd_min_ver, 'cd_min_ref_ver': cd_min_ref_ver,
+             'cd_range_hor': cd_range_hor, 'cd_range_ref_hor': cd_range_ref_hor,
+             'cd_range_ver': cd_range_ver, 'cd_range_ref_ver': cd_range_ref_ver,
+             }
+
+        return v
 
 # Excel処理部
     def to_excel(self, p_save):
@@ -175,22 +167,26 @@ class CdQcAngle:
         ws = wb['Data']
 
         # データフレーム処理部
-        df_0deg = self.df_0deg[['cd1']]
-        df_270deg = self.df_270deg[['cd1']]
+        df_normal = self.df_normal[['cd1']]
+        df_no_overlap = self.df_no_overlap[['cd1', 'cd2', 'cd3', 'cd4', 'cd5', 'cd6', 'cd7']]
 
-        self._write_excel(df_0deg, ws)
-        self._write_excel(df_270deg, ws, offset_columns=1)
+        self._write_excel(df_normal, ws)
+        self._write_excel(df_no_overlap, ws, offset_columns=1)
 
         # 測定時間処理部
-        ws['f3'] = self.meas_start_0deg
-        ws['f4'] = self.meas_start_0deg
-        ws['f5'] = self.meas_end_0deg
-        ws['g3'] = self.meas_start_270deg
-        ws['g4'] = self.meas_start_270deg
-        ws['g5'] = self.meas_end_270deg
+        ws['o4'] = self.meas_start_normal
+        ws['o5'] = self.meas_start_normal
+        ws['o6'] = self.meas_end_normal
+        ws['p4'] = self.meas_start_no_overlap
+        ws['p5'] = self.meas_start_no_overlap
+        ws['p6'] = self.meas_end_no_overlap
+
+        # 測定チップ入力
+        ws['l4'] = self.column_num
+        ws['l5'] = self.row_num
 
         # plate名
-        ws['f7'] = self.plate_type
+        ws['l9'] = self.plate_type
 
         # 保存
         wb.save(p_save)
@@ -204,10 +200,10 @@ class CdQcAngle:
 
 
 if __name__ == '__main__':
-    p_normal = Path('../../test/test_data/data_cd_nft_dynamic_multiroi/NFT_Dynamic_multiROI_Normal_V01_1-2.000H.csv')
-    p_no_overlap = Path('../../test/test_data/data_cd_nft_dynamic_multiroi/NFT_Dynamic_multiROI_No_overlap_V01_1-2.000H.csv')
-    c = CdQcAngle(p_normal, p_no_overlap, plate_type='No.1')
-    # p_save = Path('../../../result/angle.xlsx')
-    # print(vars(c))
+    p_normal = Path('../../test/test_data/data_cd_qc_nft_dynamic_multiroi/NFT_Dynamic_multiROI_Normal_V01_1-2.000H.csv')
+    p_no_overlap = Path('../../test/test_data/data_cd_qc_nft_dynamic_multiroi/NFT_Dynamic_multiROI_No_overlap_V01_1-2.000H.csv')
+    c = CdNftDynamicMultiRoi(p_normal, p_no_overlap, plate_type='No.1')
+    p_save = Path('../../../result/nft dynamic multiroi.xlsx')
+    print(vars(c))
 
     # c.to_excel(p_save)

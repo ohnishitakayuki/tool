@@ -17,7 +17,7 @@ def data_copy():
     yield
     shutil.rmtree(p_mid)
 
-def test_xy_scan_difference_category_calc(data_copy):
+def test_xy_scan_difference_global_calc(data_copy):
     p = Path(os.path.dirname(__file__) + '/test_data/data_cd_qc_xy_scan_difference_global')
     p_mid = Path(os.path.dirname(__file__) + '/test_data/data_cd_qc_xy_scan_difference_global/mid_data/')
     p_pickle = Path(os.path.dirname(__file__) + '/test_data/data_cd_qc_xy_scan_difference_global/result_calc.pkl')
