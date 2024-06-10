@@ -205,8 +205,11 @@ class CdQcCalc:
             excel_file_name = f'{self.excel_file_stem}_{meas_time}.xlsx'
             p = Path(p_save / excel_file_name)
             if not(p.exists()):
+                try:
+                    r.to_excel(p)
+                except KeyError:
+                    print('Making Excel File is fault.')
                 print('Excel file is created.', p)
-                r.to_excel(p)
             else:
                 print('Excel file is existed.', p)
 

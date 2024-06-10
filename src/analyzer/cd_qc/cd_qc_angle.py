@@ -172,11 +172,57 @@ class CdQcAngle:
                         value=df.iloc[j, i])
 
 
+# 6ROI版。E3650で使用。
+class CdQcAngle6Roi(CdQcAngle):
+    # Excel関係
+    p_excel = Path(os.path.dirname(__file__) + '/../../excel_template/cdQC/Angle 6ROI format.xlsx')
+    excel_start_row = 4
+    excel_start_column = 2
+
+    def __init__(self, p_0deg, p_270deg, plate_type=''):
+        super().__init__(p_0deg, p_270deg, plate_type)
+
+    # Excel処理部。6ROIなのでその分増やす。
+    def to_excel(self, p_save):
+        wb = openpyxl.load_workbook(self.p_excel)
+        ws = wb['Data']
+
+        # データフレーム処理部
+        df_0deg = self.df_0deg[['cd1', 'cd2', 'cd3', 'cd4', 'cd5', 'cd6']]
+        df_270deg = self.df_270deg[['cd1', 'cd2', 'cd3', 'cd4', 'cd5', 'cd6']]
+
+        self._write_excel(df_0deg, ws)
+        self._write_excel(df_270deg, ws, offset_columns=6)
+
+        # 測定時間処理部
+        ws['p3'] = self.meas_start_0deg
+        ws['p4'] = self.meas_start_0deg
+        ws['p5'] = self.meas_end_0deg
+        ws['q3'] = self.meas_start_270deg
+        ws['q4'] = self.meas_start_270deg
+        ws['q5'] = self.meas_end_270deg
+
+        # plate名
+        ws['p7'] = self.plate_type
+
+        # 保存
+        wb.save(p_save)
+
+
+
 if __name__ == '__main__':
-    p_0 = Path('../../test/test_data/data_cd_qc_angle/Angle R0_20231229073100.csv')
-    p_270 = Path('../../test/test_data/data_cd_qc_angle/Angle R270_20231229075635.csv')
-    c = CdQcAngle(p_0, p_270, plate_type='No.1')
-    p_save = Path('../../../result/angle.xlsx')
+    # p_0 = Path('../../test/test_data/data_cd_qc_angle/Angle R0_20231229073100.csv')
+    # p_270 = Path('../../test/test_data/data_cd_qc_angle/Angle R270_20231229075635.csv')
+    # c = CdQcAngle(p_0, p_270, plate_type='No.1')
+    # p_save = Path('../../../result/angle.xlsx')
     # print(vars(c))
 
     # c.to_excel(p_save)
+    p_0 = Path('../../test/test_data/data_cd_qc_angle_6roi/Angle_R0_V01_1-8.000H.csv')
+    p_270 = Path('../../test/test_data/data_cd_qc_angle_6roi/Angle_R270_V01_1-8.000H.csv')
+    c = CdQcAngle6Roi(p_0, p_270, plate_type='No.1')
+    p_save = Path('../../../result/angle 6roi.xlsx')
+    print(vars(c))
+
+    c.to_excel(p_save)
+

@@ -11,6 +11,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from cd_qc_calc import CdQcCalc
 from cd_qc.cd_qc_angle import CdQcAngle
+from cd_qc.cd_qc_angle import CdQcAngle6Roi
 
 
 class CdQcAngleCalc(CdQcCalc):
@@ -114,14 +115,36 @@ class CdQcAngleCalc(CdQcCalc):
         return list_result_tmp
 
 
+
+# 6ROI用。関数を変更している。
+class CdQcAngle6RoiCalc(CdQcAngleCalc):
+    def __init__(self, p, p_mid=None, p_from=None, is_reload=False, search_plate=False, search_word=False):
+        super().__init__(p, p_mid, p_from, is_reload, search_plate, search_word)
+
+    def _read_pickle(self, list_meas_set):
+        # QcAngleを読み込む
+        c = CdQcAngle6Roi(list_meas_set[1], list_meas_set[3], list_meas_set[2])
+        return c
+
+
 if __name__ == '__main__':
-    p = Path(os.path.dirname(__file__) + '/../../../data/E3640/angle/')
-    p_from = Path('//172.26.31.68/')
-    p_mid = Path(os.path.dirname(__file__) + '/../../../mid_data/E3640/angle/')
-    p_save = Path(os.path.dirname(__file__) + '/../../../result/E3640/angle/')
-    p_csv = Path(os.path.dirname(__file__) + '/../../../result/E3640/angle.csv')
-    p_trend = Path(os.path.dirname(__file__) + '/../../../result/excel/E3640/angle.xlsx')
-    t = CdQcAngleCalc(p, p_mid, search_plate=True)
+    # p = Path(os.path.dirname(__file__) + '/../../../data/E3640/angle/')
+    # p_from = Path('//172.26.31.68/')
+    # p_mid = Path(os.path.dirname(__file__) + '/../../../mid_data/E3640/angle/')
+    # p_save = Path(os.path.dirname(__file__) + '/../../../result/E3640/angle/')
+    # p_csv = Path(os.path.dirname(__file__) + '/../../../result/E3640/angle.csv')
+    # p_trend = Path(os.path.dirname(__file__) + '/../../../result/excel/E3640/angle.xlsx')
+    # t = CdQcAngleCalc(p, p_mid, search_plate=True)
+    # t.save_result_csv(p_csv)
+    # t.save_excels(p_save)
+    # t.save_excel_trend(p_trend)
+    p = Path(os.path.dirname(__file__) + '/../../test/test_data/data_cd_qc_angle_6roi/')
+    # p_from = Path('//172.26.31.68/')
+    p_mid = Path(os.path.dirname(__file__) + '/../../../mid_data/E3650/angle 6roi/')
+    p_save = Path(os.path.dirname(__file__) + '/../../../result/E3650/angle 6roi/')
+    p_csv = Path(os.path.dirname(__file__) + '/../../../result/E3650/angle 6roi.csv')
+    p_trend = Path(os.path.dirname(__file__) + '/../../../result/excel/E3650/angle 6roi.xlsx')
+    t = CdQcAngle6RoiCalc(p, p_mid, search_plate=True)
     t.save_result_csv(p_csv)
     t.save_excels(p_save)
     t.save_excel_trend(p_trend)
