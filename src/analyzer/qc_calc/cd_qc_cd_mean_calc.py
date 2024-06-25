@@ -131,7 +131,7 @@ if __name__ == '__main__':
     p_trend = Path(os.path.dirname(__file__) + '/../../../result/excel/E3640/CD mean.xlsx')
     t = CdQcCdMeanCalc(p, p_mid, search_plate=True)
     t.save_result_csv(p_csv)
-    t.save_excels(p_save)
-    t.save_excel_trend(p_trend)
+    # t.save_excels(p_save)
+    # t.save_excel_trend(p_trend)
 
 

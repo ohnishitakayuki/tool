@@ -198,12 +198,58 @@ class CdNftDynamicMultiRoi:
                 ws.cell(row=self.excel_start_row+j, column=self.excel_start_column+offset_columns+i,
                         value=df.iloc[j, i])
 
+    def to_excel(self, p_save):
+        wb = openpyxl.load_workbook(self.p_excel)
+        ws = wb['Data']
+
+        # データフレーム処理部
+        df_normal = self.df_normal[['cd1']]
+        df_no_overlap = self.df_no_overlap[['cd1', 'cd2', 'cd3', 'cd4', 'cd5', 'cd6', 'cd7', 'cd8', 'cd9', 'cd10']]
+
+        self._write_excel(df_normal, ws)
+        self._write_excel(df_no_overlap, ws, offset_columns=1)
+
+        # 測定時間処理部
+        ws['r4'] = self.meas_start_normal
+        ws['r5'] = self.meas_start_normal
+        ws['r6'] = self.meas_end_normal
+        ws['s4'] = self.meas_start_no_overlap
+        ws['s5'] = self.meas_start_no_overlap
+        ws['s6'] = self.meas_end_no_overlap
+
+        # 測定チップ入力
+        ws['o4'] = self.column_num
+        ws['o5'] = self.row_num
+
+        # plate名
+        ws['o9'] = self.plate_type
+
+        # 保存
+        wb.save(p_save)
+
+    # データフレームをExcelに書き込むときに使用
+    def _write_excel(self, df, ws, offset_columns=0):
+        for j in range(len(df)):
+            for i in range(len(df.columns)):
+                ws.cell(row=self.excel_start_row+j, column=self.excel_start_column+offset_columns+i,
+                        value=df.iloc[j, i])
+
+
+class CdNftDynamicMultiRoi88nm(CdNftDynamicMultiRoi):
+    # Excel関係
+    p_excel = Path(os.path.dirname(__file__) + '/../../excel_template/cdQC/NFT Dynamic multiROI 88nm format.xlsx')
+    excel_start_row = 4
+    excel_start_column = 2
+
+    def __init__(self, p_normal, p_no_overlap, plate_type=''):
+        super().__init__(p_normal, p_no_overlap, plate_type)
+
 
 if __name__ == '__main__':
-    p_normal = Path('../../test/test_data/data_cd_qc_nft_dynamic_multiroi/NFT_Dynamic_multiROI_Normal_V01_1-2.000H.csv')
-    p_no_overlap = Path('../../test/test_data/data_cd_qc_nft_dynamic_multiroi/NFT_Dynamic_multiROI_No_overlap_V01_1-2.000H.csv')
-    c = CdNftDynamicMultiRoi(p_normal, p_no_overlap, plate_type='No.1')
+    p_normal = Path('../../test/test_data/data_cd_qc_nft_dynamic_multiroi_88nm/NFT_Dynamic_multiROI_Normal_88nm_V02_10-6.000H.csv')
+    p_no_overlap = Path('../../test/test_data/data_cd_qc_nft_dynamic_multiroi_88nm/NFT_Dynamic_multiROI_No_overlap_88nm_V02_10-6.000H.csv')
+    c = CdNftDynamicMultiRoi88nm(p_normal, p_no_overlap, plate_type='No.1')
     p_save = Path('../../../result/nft dynamic multiroi.xlsx')
     print(vars(c))
 
-    # c.to_excel(p_save)
+    c.to_excel(p_save)
