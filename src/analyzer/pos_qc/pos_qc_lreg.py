@@ -158,6 +158,13 @@ class PosQcLreg:
                         value=df.iloc[j, i])
 
 
+class PosQcLreg120nm(PosQcLreg):
+    p_excel = Path(os.path.dirname(__file__) + '/../../excel_template/posQC/Local Lreg STR CH120nm format.xlsx')
+
+    def __init__(self, p1, p2):
+        super().__init__(p1, p2)
+
+
 if __name__ == '__main__':
     p1 = Path('../../test/test_data/data_pos_qc_lreg/QC_Local_CH240_V03-000.010.lms.LocalRegistration.M.0.8.8._._.lreg')
     p2 = Path('../../test/test_data/data_pos_qc_lreg/QC_Local_CH240_V03-000.011.lms.LocalRegistration.M.0.8.8._._.lreg')

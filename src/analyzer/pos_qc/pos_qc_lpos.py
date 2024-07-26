@@ -8,6 +8,7 @@ import openpyxl
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from getdf.convert_lms import ConvertLms
+from getdf.convert_prx import ConvertPrx
 from getdf.pos_correct import PosCorrect
 
 
@@ -91,8 +92,14 @@ class PosQcLpos:
         if p.stat().st_size == 0:
             raise FileNotFoundError('ファイルが空です。')
 
-        # 変換
-        c = ConvertLms(p)
+        # 変換。拡張子でファイルタイプ確認。
+        if p.suffix == '.lms':
+            c = ConvertLms(p)
+        elif p.suffix == '.prx':
+            c = ConvertPrx(p)
+        else:
+            raise FileNotFoundError('ファイルが対応している拡張子ではありません。')
+
         df = c.df(calc='lpos')
 
         return df

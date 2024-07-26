@@ -138,5 +138,5 @@ class ConvertLms:
 if __name__ == '__main__':
     p = Path('../../test/test_data/data_convert_lms/20231018QC_Global_v3000.000.lms')
     t = ConvertLms(p)
-    print(t.df(calc='simple'))
-    print(t.df(calc='gpos'))
+    df = t.df(calc='lpos')
+    df.to_csv('../../t.csv')
