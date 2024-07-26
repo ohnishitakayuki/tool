@@ -7,6 +7,7 @@ from .getdf.convert_at import ConvertAt
 
 from .pos_qc.pos_qc_gpos import PosQcGpos
 from .pos_qc.pos_qc_lpos import PosQcLpos
+from .pos_qc.pos_qc_lpos_2k import PosQcLpos2k
 from .pos_qc.pos_qc_lreg import PosQcLreg
 from .pos_qc.pos_qc_lreg import PosQcLreg120nm
 from .pos_qc.pos_qc_sl import PosQcSl
