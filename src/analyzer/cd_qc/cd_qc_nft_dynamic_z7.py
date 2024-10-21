@@ -13,9 +13,9 @@ from getdf.convert_at import ConvertAt
 from getdf.convert_emu import ConvertEmu
 
 
-class CdQcNftDynamic:
+class CdQcNftDynamicZ7:
     # Excel関係
-    p_excel = Path(os.path.dirname(__file__) + '/../../excel_template/cdQC/NFT Dynamic format.xlsx')
+    p_excel = Path(os.path.dirname(__file__) + '/../../excel_template/cdQC/NFT Dynamic Z7 format.xlsx')
     excel_start_row = 3
     excel_start_column = 2
 
@@ -38,7 +38,6 @@ class CdQcNftDynamic:
         # 結合してオブジェクト変数化
         v = v_meas | v_value | v_plate
         for k in v:
-            print(k)
             setattr(self, k, v[k])
 
         # columnとrowをオブジェクト変数化
@@ -93,29 +92,7 @@ class CdQcNftDynamic:
         v_hor_pitch = self._get_value(df_h, 'pitch', 'hor')
         v_ver_pitch = self._get_value(df_v, 'pitch', 'ver')
 
-        # AFQV, PMQV値を取得
-        afqv_1st_hor = df_h['AFQV_1st'].mean()
-        afqv_2nd_hor = df_h['AFQV_2nd'].mean()
-        afqv_1st_ver = df_v['AFQV_1st'].mean()
-        afqv_2nd_ver = df_v['AFQV_2nd'].mean()
-        pmqv_1st_hor = df_h['PMQV_1st'].mean()
-        pmqv_2nd_hor = df_h['PMQV_2nd'].mean()
-        pmqv_1st_ver = df_v['PMQV_1st'].mean()
-        pmqv_2nd_ver = df_v['PMQV_2nd'].mean()
-        white_band_1st_hor = df_h['cd11_1st'].mean() - df_h['cd1_1st'].mean()
-        white_band_2nd_hor = df_h['cd11_2nd'].mean() - df_h['cd1_2nd'].mean()
-        white_band_1st_ver = df_v['cd11_1st'].mean() - df_v['cd1_1st'].mean()
-        white_band_2nd_ver = df_v['cd11_2nd'].mean() - df_v['cd1_2nd'].mean()
-
-        v_value = {'afqv_1st_hor': afqv_1st_hor, 'afqv_2nd_hor': afqv_2nd_hor,
-                   'afqv_1st_ver': afqv_1st_ver, 'afqv_2nd_ver': afqv_2nd_ver,
-                   'pmqv_1st_hor': pmqv_1st_hor, 'pmqv_2nd_hor': pmqv_2nd_hor,
-                   'pmqv_1st_ver': pmqv_1st_ver, 'pmqv_2nd_ver': pmqv_2nd_ver,
-                   'white_band_1st_hor': white_band_1st_hor, 'white_band_2nd_hor': white_band_2nd_hor,
-                   'white_band_1st_ver': white_band_1st_ver, 'white_band_2nd_ver': white_band_2nd_ver,
-                    }
-
-        v = v_hor_space | v_ver_space | v_hor_pitch | v_ver_pitch | v_value
+        v = v_hor_space | v_ver_space | v_hor_pitch | v_ver_pitch
         return v
 
     def _df_columns_cd_add(self, df, add_name):
@@ -189,22 +166,21 @@ class CdQcNftDynamic:
         ws = wb['Data']
 
         # データフレーム処理部
-        df = self.df_raw[['cd1', 'cd2', 'cd3', 'cd4', 'cd5', 'cd6', 'cd7', 'cd8', 'cd9', 'cd10', 'cd11',
-                        'design_pos_x', 'design_pos_y', 'real_pos_x', 'real_pos_y', 'real_pos_z', 'AFQV', 'PMQV']]
+        df = self.df_raw[['cd1', 'cd2', 'cd3', 'design_pos_x', 'design_pos_y',]]
 
         self._write_excel(df, ws)
 
         # 測定時間処理部
-        ws['y3'] = self.meas_start
-        ws['y4'] = self.meas_start
-        ws['y5'] = self.meas_end
+        ws['l3'] = self.meas_start
+        ws['l4'] = self.meas_start
+        ws['l5'] = self.meas_end
 
         # 測定チップ入力
-        ws['v3'] = self.column_num
-        ws['v4'] = self.row_num
+        ws['i3'] = self.column_num
+        ws['i4'] = self.row_num
 
         # plate名
-        ws['v8'] = self.plate_type
+        ws['i8'] = self.plate_type
 
         # 保存
         wb.save(p_save)
@@ -217,12 +193,11 @@ class CdQcNftDynamic:
                         value=df.iloc[j, i])
 
 if __name__ == '__main__':
-    p = Path('../../test/test_data/data_cd_qc_nft_dynamic_trend/NFT Dynamic_20231220102342.csv')
-    c = CdQcNftDynamic(p, plate_type='No.1')
-    # p_excel = Path('../../excel_template/Global STR format.xlsx')
-    p_save = Path('../../../result/nft dynamic.xlsx')
+    p = Path('../../../data/NFT Dynamic/ResultMain.CSV')
+    c = CdQcNftDynamicZ7(p, plate_type='No.1')
+    p_save = Path('../../../result/nft dynamic Z7.xlsx')
     print(vars(c))
-    # c.to_excel(p_save)
+    c.to_excel(p_save)
     # p = Path('../../../data/ResultMain.CSV')
     # c = CdQcNftDynamic(p, plate_type='No.1')
 

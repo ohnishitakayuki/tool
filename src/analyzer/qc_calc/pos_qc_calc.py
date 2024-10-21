@@ -108,7 +108,7 @@ class PosQcCalc:
         list_real_meas = []
         for list_meas_tmp in list_meas:
             for list_ignore_tmp in list_ignore:
-                if list_meas_tmp == list_ignore_tmp:
+                if list_meas_tmp[0] == list_ignore_tmp[0]:
                     break
             else:
                 list_real_meas.append(list_meas_tmp)
