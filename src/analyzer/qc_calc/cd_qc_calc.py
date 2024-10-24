@@ -225,12 +225,13 @@ class CdQcCalc:
         list_result = []
         for r in list_instance:
             # 結果インスタンスから引き出す数値
-            #tryでエラーははじこう
+            # tryでエラーははじこう
             try:
                 list_result_tmp = self._get_list_result_tmp(r)
             except AttributeError:
                 print('空データのため、Attribute Error発生。')
                 continue
+
             list_result.append(list_result_tmp)
         df = pd.DataFrame(list_result)
         wb = openpyxl.load_workbook(self.p_trend_format)

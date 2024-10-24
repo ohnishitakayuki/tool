@@ -15,6 +15,7 @@ class ConvertEmu:
 
         # 読み込みと整形
         df_tmp = pd.read_csv(p)
+        df_tmp = df_tmp.replace({'Error': np.nan})
         df_tmp['meas_date'] = pd.to_datetime(df_tmp['Date'])
         df = df_tmp[['meas_date']]
         df = pd.concat([df, df_tmp[['SamplePosX', 'SamplePosY',

@@ -16,7 +16,7 @@ class CdQcNftDynamicZ7Calc(CdQcCalc):
     ignore_list_name = 'ignore_list.pkl'
 
     # Excel関係
-    p_trend_format = Path(os.path.dirname(__file__) + '/../../excel_template/cdQC_trend/NFT Dynamic Trend Z7.xlsx')
+    p_trend_format = Path(os.path.dirname(__file__) + '/../../excel_template/cdQC_trend/NFT Dynamic Z7 Trend.xlsx')
     excel_file_stem = 'NFT_Dynamic'
     excel_start_row = 6
     excel_start_column = 1
